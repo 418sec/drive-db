@@ -1,8 +1,15 @@
+// encode html to prevent XSS
+const sanitizeHTML = (str) => {
+	return str.replace(/[^\w. ]/gi, function (c) {
+		return '&#' + c.charCodeAt(0) + ';';
+	});
+};
+
 // Find the Google Drive data
 const getKeys = row => Object.keys(row).filter(key => /^gsx\$/.test(key));
 const parseRow = row => {
   return getKeys(row).reduce((obj, key) => {
-    obj[key.slice(4)] = row[key].$t;
+    obj[key.slice(4)] = sanitizeHTML(row[key].$t);
     return obj;
   }, {});
 };
