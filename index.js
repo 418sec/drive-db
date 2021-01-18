@@ -1,8 +1,18 @@
+// Escape HTML entities
+const escapeHTML = str => str.replace(/[&<>'"]/g, 
+  tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag]));
+
 // Find the Google Drive data
 const getKeys = row => Object.keys(row).filter(key => /^gsx\$/.test(key));
 const parseRow = row => {
   return getKeys(row).reduce((obj, key) => {
-    obj[key.slice(4)] = row[key].$t;
+    obj[key.slice(4)] = escapeHTML(row[key].$t);
     return obj;
   }, {});
 };
